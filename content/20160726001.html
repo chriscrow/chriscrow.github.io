@@ -1,0 +1,75 @@
+---
+layout: default
+---
+<a href="http://www.cnblogs.com/ydhliphonedev/archive/2012/12/07/2806866.html">原文地址</a>
+
+<h4>iphone崩溃日志分析工具symbolicatecrash用法</h4>
+
+<div>
+<p>iphone崩溃日志分析工具symbolicatecrash</p>
+<p>&nbsp;</p>
+<p>Symbolicatecrash是Xcode自带的一个分析工具，可以通过机器上的崩溃日志和应用的.dSYM文件定位发生崩溃的位置，把crash日志中的地址替换成代码相应位置。</p>
+<p>使用效果：</p>
+<p>分析前：</p>
+<p>Thread 0 name: Dispatch queue: com.apple.main-thread<br>Thread 0 Crashed:<br>0   CoreFoundation                 
+0x3723b870 0x37180000 + 768112<br>1   CoreFoundation                 
+0x37196648 0x37180000 + 91720<br>2   CoreFoundation                 
+0x37181e90 0x37180000 + 7824<br>3   CoreFoundation                 
+0x3718bb74 0x37180000 + 47988<br>4   CoreFoundation                 
+0x3718ba8e 0x37180000 + 47758<br>5   UIKit                          
+0x30f0f866 0x30f0a000 + 22630<br>6   UIKit                          
+0x30f0f98a 0x30f0a000 + 22922<br>7   UIKit                          
+0x30f0f98a 0x30f0a000 + 22922<br>8   UIKit                          
+0x310cdf3e 0x30f0a000 + 1851198<br>9   UIKit                          
+0x30f0ecb6 0x30f0a000 + 19638<br>10  UIKit                          
+0x30fe7b80 0x30f0a000 + 908160<br>11  UIKit                          
+0x30fe7ab2 0x30f0a000 + 907954<br>12  UIKit                          
+0x30f5f452 0x30f0a000 + 349266<br>13 UIKit                          
+0x30fbf936 0x30f0a000 + 743734 </p>
+<p>分析后：</p>
+<p>0   CoreFoundation                 
+0x3723b870 ___forwarding___ + 136<br>1   CoreFoundation                 
+0x37196648 _CF_forwarding_prep_0 + 40<br>2   CoreFoundation                 
+0x37181e90 CFRetain + 76<br>3   CoreFoundation                 
+0x3718bb74 +[__NSArrayI __new::] + 48<br>4   CoreFoundation                 
+0x3718ba8e -[__NSPlaceholderArray initWithObjects:count:] + 294<br>5   UIKit                          
+0x30f0f866 -[UIView(Hierarchy) _makeSubtreePerformSelector:withObject:withObject:copySublayers:] + 70<br>6   UIKit                          
+0x30f0f98a -[UIView(Hierarchy) _makeSubtreePerformSelector:withObject:withObject:copySublayers:] + 362<br>7   UIKit                          
+0x30f0f98a -[UIView(Hierarchy) _makeSubtreePerformSelector:withObject:withObject:copySublayers:] + 362<br>8   UIKit                          
+0x310cdf3e __UIViewWillBeRemovedFromSuperview + 298<br>9   UIKit                          
+0x30f0ecb6 -[UIView(Hierarchy) removeFromSuperview] + 50<br>10  UIKit                          
+0x30fe7b80 -[UITableViewCell removeFromSuperview] + 124<br>11  UIKit                          
+0x30fe7ab2 -[UITableView(_UITableViewPrivate) _reuseTableViewCell:] + 398<br>12  UIKit                          
+0x30f5f452 -[UITableView reloadData] + 530<br>13 UIKit                          
+0x30fbf936 -[UITableView _selectRowAtIndexPath:animated:scrollPosition:notifyDelegate:] + 938 
+</p>
+<p>&nbsp;</p>
+<p>使用方法：</p>
+<p>1.       找到Symbolicatecrash文件</p>
+<p>Xcode 4.3的之后</p>
+<p>/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/Library/PrivateFrameworks/DTDeviceKit.framework/Versions/A/Resources/  </p>
+<p>Xcode 4.3之前</p>
+<p>/Developer/Platforms/iPhoneOS.platform/Developer/Library/PrivateFrameworks/DTDeviceKit.framework/Versions/A/Resources/symbolicatecrash  </p>
+<p>（附：Mac系统显示隐藏文件</p>
+<p>终端中输入以下命令</p>
+<p>显示Mac隐藏文件的命令：defaults write com.apple.finder AppleShowAllFiles 
+-bool true</p>
+<p>隐藏Mac隐藏文件的命令：defaults write com.apple.finder AppleShowAllFiles 
+-bool false</p>
+<p>输入完回车，重启Finder：左上角的苹果标志--&gt;强制退出--&gt;Finder--&gt;重新启动</p>
+<p>）</p>
+<p>2.       Symbolicatecrash文件独立于Xcode，可以拷出来使用，附件中为Xcode4.5中的Symbolicatecrash文件</p>
+<p>3.       命终端中输入命令，命令格式：Symbolicatecrash  .crash  
+.dSYM  &gt; 
+aa.log</p>
+<p>即：Symbolicatecrash  + 崩溃日志 + APP对应的.dSYM文件 + &gt; + 输出到的文件</p>
+<p>&nbsp;</p>
+<p>4. 如果提示"DEVELOPER_DIR" is not defined</p>
+<p>&nbsp;</p>
+<p>Xcode4.3之后 在终端中输入： export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer</p>
+<p>&nbsp;</p>
+<p>Xcode4.3之前 在终端中输入： export DEVELOPER_DIR=/Applications/Xcode.app</p>
+<p><span style="font-family: Calibri;">&nbsp;</span></p>
+<p>建议：每次打出版本后备份相应的.dSYM文件，对应版本崩溃后可根据此文件分析崩溃日志</p>
+
+</div>
